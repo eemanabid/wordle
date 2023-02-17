@@ -153,12 +153,15 @@ function disableLoseMode(){
 }
 
 // HINT
+let hintbtn = false;
+
 function hintMode(){
     document.body.classList.add("hintmode");
     const hintmodeDiv = document.querySelector('.hintmsg');
     const hintDiv = document.querySelector('#hint');
     hintDiv.innerHTML = hint;
     hintmodeDiv.style.display = 'block';
+    hintbtn = true;
 }
 
 function disableHintMode(){
@@ -167,7 +170,18 @@ function disableHintMode(){
     const hintDiv = document.querySelector('#hint');
     hintDiv.innerHTML = hint;
     hintmodeDiv.style.display = 'none';
+    hintbtn = false;
 }
+
+document.getElementById("hintbutton").addEventListener('click', function () {
+    if (!hintbtn) {
+      hintMode()
+    }
+    else {
+        hintbtn = false;
+      disableHintMode();
+    }
+  })
 
 function update(){
     let correct = 0;

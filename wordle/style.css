@@ -3,7 +3,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
 #container {
   display: flex;
   height: 100%;
@@ -53,12 +52,6 @@ header {
   grid-gap: 1px;
   padding: 100px;
   box-sizing: border-box;
-  /*width: 350px;
-  height: 420px;
-  margin: 0 auto;
-  margin-top: 3px;
-  display: flex;
-  flex-wrap: wrap;*/
 }
 
 .tile{
@@ -146,13 +139,6 @@ header {
   color:gainsboro;
 }
 
-/*#menu{
-  margin-top: -50px;
-  text-decoration: none;
-  border: none;
-  float: right;
-}*/
-
 #menubtn{
   float: right;
   margin-right: 20px;
@@ -180,36 +166,12 @@ header {
   color: white;
 }
 
-/*img {
-  position: fixed;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: block;
-  margin: 0 auto;
-  padding: 30px;
-  right: 50%;
-}*/
-
 #winmodeimg {
   display: none;
   position: fixed;
   right: 50%;
   transform: translate(50%, 30%);
   transition: 0.5s;
-}
-
-
-.winmode{
-  
-}
-
-.losemode{
-
-}
-
-.hintmode{
-
 }
 
 .winmodemsg {
@@ -229,7 +191,7 @@ header {
   text-align: center;
   color: white;
   font-size: 15px;
-  background-color: rgba(255, 0, 0, 0.417);
+  background-color: rgb(179, 20, 20);
   padding: 10px;
   position: fixed;
   bottom: 30px;
