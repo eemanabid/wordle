@@ -7,38 +7,48 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <div id = "sideMenu" class = "sidemenu">
+      <ul>
+        <h3>How to Play</h3>
+        <li>Start typing. The letters will appear in the boxes</li>
+        <li>Remove letters with Backspace</li>
+        <li>Hit Enter/Return to submit an answer</li>
+        <li>Letters with green background are in the right spot</li>
+        <li>Letters with yellow background exist in the word, but are in the wrong spots</li>
+        <li>Letters with gray background do not exist in the word</li>
+        <li>If you need a hint, click the &#63; icon</li>
+      </ul>
+    </div>
+
     <div id = "container">
+
       <div id = "game">
         <header>
           <h1 id = "title">Wordle</h1>
             <ul id = "menubtn">
-              <button id = "darkmode" onclick="darkMode()">&#9681;</button>
-              <button id = "hint">&#63;</button>
-              <button class = "instructions">&#9432;</button>
+              <button id = "darkmode">&#9681;</button>
+              <button id = "hintbutton" onclick="hintMode()">&#63;</button>
+              <button id = "instructions">&#9432;</button>
         </header>
+
+        <div id = "winmodeimg" style = "display: none">
+          <img src = "https://res.cloudinary.com/mkf/image/upload/v1675467141/ENSF-381/labs/congrats_fkscna.gif" width = "300">
+        </div>
 
         <div id="board-container">
           <div id="board"></div>
         </div>
 
         <br>
-        <h1 id = "answer"></h1>
-        
+    
         <br>
-        <button id="start-over-btn">Start Over</button>
-
-        <div id = "sidebar">
-          <ul id="mySidebar" class="sidebar-content">
-            <h3>How to Play</h3>
-            <li>Start typing.</li>
-            <li>Link 2</li>
-            <li>Link 3</li>
-          </ul>
-        </div>
-      </ul>
-
+        <button id="start-over-btn" onclick="startOver()">Start Over</button>
+      
       </div>
     </div>
+    <div class = "winmodemsg" style = "display: none">You guessed the word <b><div id = "answer"></div></b> correctly!</div>
+    <div class = "losemodemsg" style = "display: none">You missed the word <b><div id = "lostanswer"></div></b> and lost!</div>
+    <div class = "hintmsg" style = "display: none"><i>Hint: </i><div id = "hint"></div></b></div>
     <div class="bottom">&copy; EA</div>
     <script src="./wordle.js"></script>
   </body>

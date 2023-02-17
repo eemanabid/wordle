@@ -1,7 +1,3 @@
-// remove this line
-// it's just here to shows it works
-// window.alert("works!");
-
 var col = 0;
 var row = 0;
 
@@ -16,36 +12,6 @@ let hints = [];
 let word;
 let hint;
 
-async function loadWords() {
-    const res = await fetch("https://api.masoudkf.com/v1/wordle", {
-        headers: {
-            "x-api-key": "sw0Tr2othT1AyTQtNDUE06LqMckbTiKWaVYhuirv",
-        },
-    });
-
-    if (res.ok) {
-        const data = await res.json();
-        words = data.dictionary.map(obj => obj.word);
-        hints = data.dictionary.map(obj => obj.hint);
-        console.log(words);
-        var N = words.length;
-        var index = Number.parseInt(Math.random() * N)
-        word = words[index].toUpperCase();
-        hint = hints[index];
-        console.log(word);
-        console.log(hint);
-    } else {
-        console.error(`HTTP error: ${res.status}`);
-    }
-}
-
-loadWords();
-
-
-window.onload = function(){
-    createSquares();
-}
-
 function createSquares(){
     for (let r = 0; r < height; r++){
         for(let c = 0; c < width; c++){
@@ -56,9 +22,9 @@ function createSquares(){
             document.getElementById("board").appendChild(tile);
         }
     }
+}
 
-
-
+function keyPress(){
     // Listen for Key Press
     document.addEventListener("keyup", (e) => {
         if (gameOver) return;
@@ -91,21 +57,116 @@ function createSquares(){
                 }
                 word += tileValue;
             }
+            if (wordComplete == false){
+                window.alert("You must complete the word first");
+            }
             if (wordComplete && word.length == 4){
                 update();
                 row += 1; //start new row
                 col = 0; //start at 0 for new row
             }
-            else {
-                window.alert("You must complete the word first");
-            }
         }
 
         if (!gameOver && row == height){
             gameOver = true;
-            document.getElementById("answer").innerText = word;
         }
     })
+}
+keyPress();
+
+async function loadWords() {
+    const res = await fetch("https://api.masoudkf.com/v1/wordle", {
+        headers: {
+            "x-api-key": "sw0Tr2othT1AyTQtNDUE06LqMckbTiKWaVYhuirv",
+        },
+    });
+
+    if (res.ok) {
+        const data = await res.json();
+        words = data.dictionary.map(obj => obj.word);
+        hints = data.dictionary.map(obj => obj.hint);
+        console.log(words);
+        var N = words.length;
+        var index = Number.parseInt(Math.random() * N)
+        word = words[index].toUpperCase();
+        hint = hints[index];
+        console.log(word);
+        console.log(hint);
+    } else {
+        console.error(`HTTP error: ${res.status}`);
+    }
+}
+
+loadWords();
+createSquares();
+
+//WINMODE
+function enableWinMode(){
+    document.body.classList.add("winmode");
+    //document.getElementById("winmodeimg").classList.toggle("show");
+    const board = document.getElementById("board");
+    const tiles = board.querySelectorAll(".tile");
+    
+    for (let i = 0; i < tiles.length; i++) {
+        board.removeChild(tiles[i]);
+    }
+    var imgDiv = document.getElementById("winmodeimg");
+    imgDiv.style.display = "block";
+    const winmodeDiv = document.querySelector('.winmodemsg');
+    const answerDiv = document.querySelector('#answer');
+    answerDiv.innerHTML = word;
+    winmodeDiv.style.display = 'block';
+
+    if (document.body.classList.contains("hintmode")){
+        disableHintMode();
+    }
+}
+
+function disableWinMode(){
+    document.body.classList.remove("winmode");
+    var imgDiv = document.getElementById("winmodeimg");
+    imgDiv.style.display = "none";
+    const winmodeDiv = document.querySelector('.winmodemsg');
+    const answerDiv = document.querySelector('#answer');
+    answerDiv.innerHTML = word;
+    winmodeDiv.style.display = 'none';
+}
+
+function enableLoseMode(){
+    document.body.classList.add("losemode");
+    const losemodeDiv = document.querySelector('.losemodemsg');
+    const answerDiv = document.querySelector('#lostanswer');
+    answerDiv.innerHTML = word;
+    losemodeDiv.style.display = 'block';
+
+    if (document.body.classList.contains("hintmode")){
+        disableHintMode();
+    }
+}
+
+function disableLoseMode(){
+    document.body.classList.remove("losemode");
+    const losemodeDiv = document.querySelector('.losemodemsg');
+    const answerDiv = document.querySelector('#answer');
+    answerDiv.innerHTML = word;
+    losemodeDiv.style.display = 'none';
+}
+
+// HINT
+function hintMode(){
+    document.body.classList.add("hintmode");
+    const hintmodeDiv = document.querySelector('.hintmsg');
+    const hintDiv = document.querySelector('#hint');
+    hintDiv.innerHTML = hint;
+    hintmodeDiv.style.display = 'block';
+}
+
+function disableHintMode(){
+    document.body.classList.remove("hintmode");
+    const hintmodeDiv = document.querySelector('.hintmsg');
+    const hintDiv = document.querySelector('#hint');
+    hintDiv.innerHTML = hint;
+    hintmodeDiv.style.display = 'none';
 }
 
 function update(){
@@ -141,6 +202,9 @@ function update(){
     // go again and mark which ones are present but in wrong position
     for (let c = 0; c < width; c++){
         let currTile = document.getElementById(row.toString() + '-' + c.toString());
+        if (currTile === null) {
+            continue; // Skip to the next iteration of the loop if currTile is null
+        }
         let letter = currTile.innerText;
 
         if (!currTile.classList.contains("correct")){
@@ -154,8 +218,56 @@ function update(){
             }
         }
     }
+
+    if (correct == 4){
+        enableWinMode();
+    }
+
+    else if (row == height - 1){
+        enableLoseMode();
+    }
 }
 
+// Define a function to start the game over
+
+function startOver() {
+    if (document.body.classList.contains("winmode")){
+        disableWinMode();
+        createSquares();
+    }
+
+    if (document.body.classList.contains("losemode")){
+        disableLoseMode();
+    }
+
+    if (document.body.classList.contains("hintmode")){
+        disableHintMode();
+    }
+    
+    for (let row = 0; row < height; row++) {
+      for (let col = 0; col < width; col++) {
+        let currTile = document.getElementById(row.toString() + '-' + col.toString());
+        document.getElementById(`${row}-${col}`).textContent = "";
+        currTile.classList.remove("correct");
+        currTile.classList.remove("present");
+        currTile.classList.remove("absent");
+      }
+    }
+
+    var N = words.length;
+    var index = Number.parseInt(Math.random() * N)
+    word = words[index].toUpperCase();
+    hint = hints[index];
+    console.log(word);
+    console.log(hint);
+  
+    gameOver = false;
+    row = 0; col = 0;
+    document.getElementById("hint").textContent = hints[index];
+    document.getElementById("answer").textContent = "";
+  }
+
+// DARKMODE
 let darkMode = localStorage.getItem("darkmode");
 const darkModeToggle = document.querySelector('#darkmode');
 
@@ -178,6 +290,9 @@ darkModeToggle.addEventListener("click", () => {
         disableDarkMode();
     }
 })
+
+
+/*
 const mySidebar = document.getElementById("mySidebar")
 const sidebar = document.getElementById('sidebar')
 
@@ -204,7 +319,7 @@ mySidebar.addEventListener('click', function () {
   }
 })
 
-/*function myFunction() {
+function sideBar() {
     document.getElementById("mySidebar").classList.toggle("show");
   }
   
@@ -220,27 +335,33 @@ mySidebar.addEventListener('click', function () {
         }
       }
     }
-  }*/
+  }
+  */
 
-// Add an event listener to the button to start the game over when clicked
-//document.getElementById("start-over-btn").addEventListener("click", createSquares);
-// Define a function to start the game over
-/*function startOver() {
-    // Clear the board by setting the text content of all tiles to empty strings
-    for (let row = 0; row < height; row++) {
-      for (let col = 0; col < width; col++) {
-        document.getElementById(`${row}-${col}`).textContent = "";
-      }
+let menuOpen = false
+
+function openMenu(){
+    menuOpen = true
+    document.getElementById("sideMenu").style.marginRight = '0';
+    document.getElementById("game").style.marginRight = '400px';
+    document.getElementById("start-over-btn").style.marginRight = '200px';
+    document.getElementById("winmodeimg").style.marginRight = '200px';
+}
+
+function closeMenu(){
+    menuOpen = false
+    document.getElementById("sideMenu").style.marginRight = '-400px';
+    document.getElementById("game").style.marginRight = '0';
+    document.getElementById("start-over-btn").style.marginRight = '0';
+    document.getElementById("winmodeimg").style.marginRight = '0';
+}
+
+document.getElementById("instructions").addEventListener('click', function () {
+    if (!menuOpen) {
+      openMenu()
     }
-  
-    // Pick a new random word from the loaded dictionary
-    const index = Math.floor(Math.random() * words.length);
-    word = words[index].toUpperCase();
-  
-    // Reset the game over flag
-    gameOver = false;
-  
-    // Update the hint and answer elements with the new word
-    //document.getElementById("hint").textContent = hints[index];
-    document.getElementById("answer").textContent = "";
-  }*/
+    else {
+        menuOpen = false;
+      closeMenu();
+    }
+  })
