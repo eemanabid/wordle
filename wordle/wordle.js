@@ -243,8 +243,12 @@ function update(){
 }
 
 // Define a function to start the game over
+const startOverBtn = document.getElementById('start-over-btn');
 
 function startOver() {
+    startOverBtn.disabled = true;
+    startOverBtn.textContent = 'Loading...';
+
     if (document.body.classList.contains("winmode")){
         disableWinMode();
         createSquares();
@@ -279,6 +283,9 @@ function startOver() {
     row = 0; col = 0;
     document.getElementById("hint").textContent = hints[index];
     document.getElementById("answer").textContent = "";
+
+    startOverBtn.disabled = false;
+    startOverBtn.textContent = 'Start Over';
   }
 
 // DARKMODE
