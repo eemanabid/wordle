@@ -100,10 +100,9 @@ async function loadWords() {
 loadWords();
 createSquares();
 
-//WINMODE
+//WIN MODE
 function enableWinMode(){
     document.body.classList.add("winmode");
-    //document.getElementById("winmodeimg").classList.toggle("show");
     const board = document.getElementById("board");
     const tiles = board.querySelectorAll(".tile");
     
@@ -132,6 +131,7 @@ function disableWinMode(){
     winmodeDiv.style.display = 'none';
 }
 
+// LOSE MODE
 function enableLoseMode(){
     document.body.classList.add("losemode");
     const losemodeDiv = document.querySelector('.losemodemsg');
@@ -217,16 +217,16 @@ function update(){
     for (let c = 0; c < width; c++){
         let currTile = document.getElementById(row.toString() + '-' + c.toString());
         if (currTile === null) {
-            continue; // Skip to the next iteration of the loop if currTile is null
+            continue;
         }
         let letter = currTile.innerText;
 
         if (!currTile.classList.contains("correct")){
-            // is it in the word?
+            // present in the word
             if (word.includes(letter) && letterCount[letter] > 0){
                 currTile.classList.add("present");
                 letterCount[letter] -= 1;
-            } // not in the word
+            } // absent in the word
             else {
                 currTile.classList.add("absent");
             }
@@ -242,7 +242,7 @@ function update(){
     }
 }
 
-// Define a function to start the game over
+// STARTOVER
 const startOverBtn = document.getElementById('start-over-btn');
 
 function startOver() {
@@ -288,6 +288,10 @@ function startOver() {
     startOverBtn.textContent = 'Start Over';
   }
 
+function blur(){
+    document.getElementById("start-over-btn").blur();
+}
+
 // DARKMODE
 let darkMode = localStorage.getItem("darkmode");
 const darkModeToggle = document.querySelector('#darkmode');
@@ -312,53 +316,7 @@ darkModeToggle.addEventListener("click", () => {
     }
 })
 
-
-/*
-const mySidebar = document.getElementById("mySidebar")
-const sidebar = document.getElementById('sidebar')
-
-let menuOpen = false
-
-function openMenu() {
-  menuOpen = true
-  overlay.style.display = 'block'
-  sidebar.style.width = '250px'
-}
-
-function closeMenu() {
-  menuOpen = false
-  overlay.style.display = 'none'
-  sidebar.style.width = '0px'
-}
-
-mySidebar.addEventListener('click', function () {
-  if (!menuOpen) {
-    openMenu()
-  }
-  else {
-    closeMenu();
-  }
-})
-
-function sideBar() {
-    document.getElementById("mySidebar").classList.toggle("show");
-  }
-  
-  // Close the dropdown menu if the user clicks outside of it
-  window.onclick = function(event) {
-    if (!event.target.matches('.instructions')) {
-      var dropdowns = document.getElementsByClassName("sidebar-content");
-      var i;
-      for (i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
-          openDropdown.classList.remove('show');
-        }
-      }
-    }
-  }
-  */
-
+// SIDEMENU
 let menuOpen = false
 
 function openMenu(){

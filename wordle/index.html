@@ -26,9 +26,9 @@
         <header>
           <h1 id = "title">Wordle</h1>
             <ul id = "menubtn">
-              <button id = "darkmode">&#9681;</button>
-              <button id = "hintbutton">&#63;</button>
-              <button id = "instructions">&#9432;</button>
+              <button id = "darkmode" onclick = "blur()">&#9681;</button>
+              <button id = "hintbutton" onclick = "blur()">&#63;</button>
+              <button id = "instructions" onclick = "blur()">&#9432;</button>
         </header>
 
         <div id = "winmodeimg" style = "display: none">
@@ -42,7 +42,7 @@
         <br>
     
         <br>
-        <button id="start-over-btn" onclick="startOver()">Start Over</button>
+        <button id="start-over-btn" onclick="startOver(); blur()">Start Over</button>
       
       </div>
     </div>
